@@ -12,7 +12,7 @@ import com.dicoding.academy.themealsapp.core.domain.usecase.MealUseCase
 import com.dicoding.academy.themealsapp.core.utils.AppExecutors
 
 object Injection {
-    private fun provideRepository(context: Context): IMealRepository {
+    fun provideRepository(context: Context): IMealRepository {
         val database = MealDatabase.getInstance(context)
         val remoteDataSource = RemoteDataSource.getInstance(ApiConfig.provideApiService())
         val localDataSource = LocalDataSource.getInstance(database.mealDao())
