@@ -14,8 +14,7 @@ import kotlinx.coroutines.launch
 class HomeViewModel(
     private val mealUseCase: MealUseCase
 ) : ViewModel() {
-    var categories: LiveData<List<CategoryModel>> = MutableLiveData<List<CategoryModel>>()
-
+    var categories: LiveData<List<CategoryModel>> = MutableLiveData()
     fun getCategories() {
         categories = mealUseCase.getCategories()
     }

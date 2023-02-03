@@ -38,7 +38,7 @@ fun MealApp(
 
     Scaffold(
         bottomBar = {
-            if (currentRoute != Screen.Detail.route) {
+            if (currentRoute != Screen.DetailCategory.route) {
                 BottomBar(navController)
             }
         },
@@ -51,8 +51,8 @@ fun MealApp(
         ) {
             composable(Screen.Home.route) {
                 HomeScreen(
-                    navigateToDetail = { rewardId ->
-//                        navController.navigate(Screen.Detail.createRoute(rewardId))
+                    navigateToDetail = { categoryID ->
+                        navController.navigate(Screen.DetailCategory.createRoute(categoryID))
                     }
                 )
             }

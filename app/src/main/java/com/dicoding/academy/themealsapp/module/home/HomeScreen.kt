@@ -54,7 +54,12 @@ fun HomeContent(
         modifier = modifier
     ) {
         items(categories) { data ->
-            CategoryRow(data)
+            CategoryRow(
+                data,
+                modifier = Modifier.clickable {
+                    navigateToDetail(data.id)
+                }
+            )
         }
 
     }

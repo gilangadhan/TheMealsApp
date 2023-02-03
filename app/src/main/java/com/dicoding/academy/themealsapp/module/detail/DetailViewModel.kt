@@ -7,9 +7,7 @@ import com.dicoding.academy.themealsapp.core.domain.usecase.MealUseCase
 class DetailViewModel(
     private val mealUseCase: MealUseCase
 ) : ViewModel() {
-
     fun getCategory(id: String) = mealUseCase.getFavoriteCategoryBy(id)
-
     fun addCategory(categoryModel: CategoryModel) {
         mealUseCase.addFavoriteCategory(categoryModel)
     }
