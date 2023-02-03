@@ -27,7 +27,7 @@ fun HomeScreen(
     viewModel: HomeViewModel = viewModel(
         factory = ViewModelFactory(Injection.provideMealUseCase(LocalContext.current))
     ),
-    navigateToDetail: (String) -> Unit,
+    navigateToDetail: (CategoryModel) -> Unit,
 ) {
     val categories  = viewModel.categories.observeAsState().value
 
@@ -46,7 +46,7 @@ fun HomeScreen(
 fun HomeContent(
     categories: List<CategoryModel>,
     modifier: Modifier = Modifier,
-    navigateToDetail: (String) -> Unit,
+    navigateToDetail: (CategoryModel) -> Unit,
 ) {
     LazyColumn(
         contentPadding = PaddingValues(16.dp),
@@ -57,7 +57,7 @@ fun HomeContent(
             CategoryRow(
                 data,
                 modifier = Modifier.clickable {
-                    navigateToDetail(data.id)
+                    navigateToDetail(data)
                 }
             )
         }

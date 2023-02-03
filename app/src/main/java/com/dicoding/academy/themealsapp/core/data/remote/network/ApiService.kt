@@ -8,7 +8,4 @@ interface ApiService {
     @GET("categories.php")
     fun getCategories(): Call<CategoriesResponse>
 
-    @GET("filter.php?c=Seafood")
-    fun getMeals(): Call<CategoriesResponse>
-
 }

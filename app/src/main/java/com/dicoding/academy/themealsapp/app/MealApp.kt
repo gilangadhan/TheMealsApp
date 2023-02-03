@@ -2,6 +2,8 @@ package com.dicoding.academy.themealsapp.app
 
 import android.content.Context
 import android.content.Intent
+import android.os.Build
+import android.os.Bundle
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -16,17 +18,22 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.dicoding.academy.themealsapp.R
+import com.dicoding.academy.themealsapp.core.domain.model.CategoryModel
+import com.dicoding.academy.themealsapp.module.detail.DetailScreen
 import com.dicoding.academy.themealsapp.module.favorite.FavoriteScreen
 import com.dicoding.academy.themealsapp.module.home.HomeScreen
 import com.dicoding.academy.themealsapp.module.profile.ProfileScreen
 import com.dicoding.academy.themealsapp.ui.navigation.NavigationItem
 import com.dicoding.academy.themealsapp.ui.navigation.Screen
 import com.dicoding.academy.themealsapp.ui.theme.MyMovieTheme
+import com.google.gson.Gson
 
 @Composable
 fun MealApp(
@@ -51,8 +58,8 @@ fun MealApp(
         ) {
             composable(Screen.Home.route) {
                 HomeScreen(
-                    navigateToDetail = { categoryID ->
-                        navController.navigate(Screen.DetailCategory.createRoute(categoryID))
+                    navigateToDetail = { categoryModel ->
+                        navController.navigate(Screen.DetailCategory.createRoute(categoryModel))
                     }
                 )
             }
@@ -67,10 +74,40 @@ fun MealApp(
             composable(Screen.Profile.route) {
                 ProfileScreen()
             }
+//            composable(
+//                route = Screen.DetailCategory.route,
+//                arguments = listOf(navArgument("categoryModel") { type = AssetParamType() }),
+//            ) {
+//                val categoryModel = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+//                    it.arguments?.getParcelable("categoryModel", CategoryModel::class.java) as CategoryModel
+//                } else {
+//                    it.arguments?.getParcelable<CategoryModel>("categoryModel") as CategoryModel
+//                }
+//                DetailScreen(
+//                    categoryModel = categoryModel
+//                )
+//            }
         }
     }
 }
 
+class AssetParamType : NavType<CategoryModel>(isNullableAllowed = false) {
+    override fun get(bundle: Bundle, key: String): CategoryModel {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            bundle.getParcelable("categoryModel", CategoryModel::class.java) as CategoryModel
+        } else {
+            bundle.getParcelable<CategoryModel>("categoryModel") as CategoryModel
+        }
+    }
+
+    override fun parseValue(value: String): CategoryModel {
+        return Gson().fromJson(value, CategoryModel::class.java)
+    }
+
+    override fun put(bundle: Bundle, key: String, value: CategoryModel) {
+        bundle.putParcelable(key, value)
+    }
+}
 private fun shareOrder(context: Context, summary: String) {
     val intent = Intent(Intent.ACTION_SEND).apply {
         type = "text/plain"
