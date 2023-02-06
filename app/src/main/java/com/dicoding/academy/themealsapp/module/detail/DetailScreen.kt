@@ -1,6 +1,7 @@
 package com.dicoding.academy.themealsapp.module.detail
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.Button
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -35,14 +36,19 @@ fun DetailScreen(
 
     val category = viewModel.getCategory(categoryModel.id).observeAsState().value
 
-    if ((category != null && category.id.isNotEmpty())) {
-        isFavorite = true
-        DetailContent(
-            categoryModel = category,
-            modifier = modifier,
-        )
-    } else {
-        isFavorite = false
+    isFavorite = (category != null && category.id.isNotEmpty())
+
+    DetailContent(
+        categoryModel = categoryModel,
+        modifier = modifier,
+        isFavorite = isFavorite,
+    ) {
+        if (isFavorite) {
+            viewModel.deleteCategory(categoryModel.id)
+        } else {
+            viewModel.addCategory(categoryModel)
+        }
+        isFavorite != isFavorite
     }
 }
 
@@ -50,6 +56,8 @@ fun DetailScreen(
 fun DetailContent(
     categoryModel: CategoryModel,
     modifier: Modifier = Modifier,
+    isFavorite: Boolean,
+    favoriteButton: () -> Unit,
 ) {
     Column(
         verticalArrangement = Arrangement.spacedBy(16.dp),
@@ -81,6 +89,15 @@ fun DetailContent(
             overflow = TextOverflow.Ellipsis,
             style = MaterialTheme.typography.subtitle1
         )
+        Button(onClick = favoriteButton) {
+            Text(
+                text = if (isFavorite) "Favorite" else "Tidak Favorite",
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis,
+                style = MaterialTheme.typography.subtitle1
+            )
+        }
+
     }
 }
 
@@ -89,12 +106,15 @@ fun DetailContent(
 fun DetailContentPreview() {
     MyMovieTheme {
         DetailContent(
-            CategoryModel(
+            categoryModel = CategoryModel(
                 id = "1",
                 title = "Title",
                 image = "https://www.themealdb.com/images/category/beef.png",
                 description = "description"
-            )
-        )
+            ),
+            isFavorite = false,
+        ) {
+
+        }
     }
 }

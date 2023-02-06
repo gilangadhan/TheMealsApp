@@ -31,7 +31,7 @@ fun HomeScreen(
 ) {
     val categories  = viewModel.categories.observeAsState().value
 
-    if (categories != null) {
+    if (categories != null && categories.isNotEmpty()) {
         HomeContent(
             categories = categories,
             modifier = modifier,

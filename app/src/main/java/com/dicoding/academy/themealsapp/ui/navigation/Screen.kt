@@ -7,6 +7,6 @@ sealed class Screen(val route: String) {
     object Favorite : Screen("favorite")
     object Profile : Screen("profile")
     object DetailCategory : Screen("home/{categoryModel}") {
-        fun createRoute(categoryModel: CategoryModel) = "home/$categoryModel"
     }
+
 }

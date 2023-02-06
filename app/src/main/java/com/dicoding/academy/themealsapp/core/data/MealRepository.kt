@@ -13,6 +13,7 @@ interface IMealRepository {
     fun getFavoriteCategories(): LiveData<List<CategoryModel>>
     fun addFavoriteCategory(category: CategoryModel)
     fun getFavoriteCategoryBy(id: String): LiveData<CategoryModel>
+    fun deleteFavoriteCategory(id: String)
 }
 
 class MealRepository private constructor(
@@ -48,13 +49,22 @@ class MealRepository private constructor(
     }
 
     override fun addFavoriteCategory(category: CategoryModel) {
-        val tourismEntity = DataMapper.mapDomainToEntity(category)
-        appExecutors.diskIO().execute { localDataSource.addCategory(tourismEntity) }
+        val categoryEntity = DataMapper.mapDomainToEntity(category)
+        appExecutors.diskIO().execute { localDataSource.addCategory(categoryEntity) }
     }
 
     override fun getFavoriteCategoryBy(id: String): LiveData<CategoryModel>  {
-        return Transformations.map(localDataSource.getCategoryBy(id)) {
-            DataMapper.mapEntityToDomain(it)
+        val result = localDataSource.getCategoryBy(id)
+        return Transformations.map(result) {
+            if (it != null) {
+                DataMapper.mapEntityToDomain(it)
+            } else {
+                it
+            }
         }
+    }
+
+    override fun deleteFavoriteCategory(id: String) {
+        appExecutors.diskIO().execute { localDataSource.deleteCategory(id) }
     }
 }

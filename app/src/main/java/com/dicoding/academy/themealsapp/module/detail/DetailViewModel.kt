@@ -11,4 +11,8 @@ class DetailViewModel(
     fun addCategory(categoryModel: CategoryModel) {
         mealUseCase.addFavoriteCategory(categoryModel)
     }
+
+    fun deleteCategory(id: String) {
+        mealUseCase.deteleFavoriteCategory(id)
+    }
 }

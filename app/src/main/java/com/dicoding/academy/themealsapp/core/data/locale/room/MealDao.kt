@@ -6,6 +6,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.dicoding.academy.themealsapp.core.data.locale.entity.CategoryEntity
+import com.dicoding.academy.themealsapp.core.domain.model.CategoryModel
 
 @Dao
 interface MealDao {
@@ -15,6 +16,9 @@ interface MealDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun addCategory(category: CategoryEntity)
 
-    @Query("SELECT * FROM category WHERE id = :id")
+    @Query("SELECT * FROM category WHERE id = :id ORDER BY title ASC")
     fun getCategoryBy(id: String): LiveData<CategoryEntity>
+
+    @Query("DELETE FROM category WHERE id = :id")
+    fun deleteCategory(id: String)
 }
