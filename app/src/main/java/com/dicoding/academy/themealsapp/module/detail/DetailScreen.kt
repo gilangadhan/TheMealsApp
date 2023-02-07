@@ -61,7 +61,7 @@ fun DetailContent(
 ) {
     Column(
         verticalArrangement = Arrangement.spacedBy(16.dp),
-        modifier = modifier
+        modifier = modifier.padding(32.dp)
     ) {
         SubcomposeAsyncImage(
             model = categoryModel.image,
@@ -85,14 +85,12 @@ fun DetailContent(
         Spacer(modifier = Modifier.width(10.dp))
         Text(
             text = categoryModel.description,
-            maxLines = 2,
             overflow = TextOverflow.Ellipsis,
             style = MaterialTheme.typography.subtitle1
         )
         Button(onClick = favoriteButton) {
             Text(
                 text = if (isFavorite) "Favorite" else "Tidak Favorite",
-                maxLines = 2,
                 overflow = TextOverflow.Ellipsis,
                 style = MaterialTheme.typography.subtitle1
             )

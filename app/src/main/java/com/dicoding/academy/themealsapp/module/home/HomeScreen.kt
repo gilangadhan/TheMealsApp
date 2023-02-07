@@ -10,7 +10,7 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -20,6 +20,7 @@ import com.dicoding.academy.themealsapp.core.di.Injection
 import com.dicoding.academy.themealsapp.ui.common.ViewModelFactory
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.dicoding.academy.themealsapp.core.domain.model.CategoryModel
+import com.dicoding.academy.themealsapp.ui.view.EmptyView
 
 @Composable
 fun HomeScreen(
@@ -29,16 +30,21 @@ fun HomeScreen(
     ),
     navigateToDetail: (CategoryModel) -> Unit,
 ) {
-    val categories  = viewModel.categories.observeAsState().value
+    val categories  = viewModel.categories.observeAsState()
 
-    if (categories != null && categories.isNotEmpty()) {
-        HomeContent(
-            categories = categories,
-            modifier = modifier,
-            navigateToDetail = navigateToDetail,
-        )
-    } else {
-        viewModel.getCategories()
+    viewModel.getCategories()
+
+    categories.value.let {
+        if (it != null && it.isNotEmpty()) {
+            HomeContent(
+                categories = it,
+                modifier = modifier,
+                navigateToDetail = navigateToDetail,
+            )
+        } else {
+            EmptyView()
+            viewModel.getCategories()
+        }
     }
 }
 

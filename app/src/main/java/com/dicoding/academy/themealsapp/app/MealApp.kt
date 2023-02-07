@@ -74,9 +74,13 @@ fun MealApp(
             composable(Screen.Favorite.route) {
                 val context = LocalContext.current
                 FavoriteScreen(
-//                    onOrderButtonClicked = { message ->
-//                        shareOrder(context, message)
-//                    }
+                    navigateToDetail = {
+                        navController.currentBackStackEntry?.savedStateHandle?.set(
+                            key = "categoryModel",
+                            value = it
+                        )
+                        navController.navigate(Screen.DetailCategory.route)
+                    }
                 )
             }
             composable(Screen.Profile.route) {

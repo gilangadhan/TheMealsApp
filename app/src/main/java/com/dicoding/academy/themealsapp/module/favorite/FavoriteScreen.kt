@@ -1,4 +1,67 @@
 package com.dicoding.academy.themealsapp.module.favorite
 
-class FavoriteScreen {
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.dicoding.academy.themealsapp.core.di.Injection
+import com.dicoding.academy.themealsapp.core.domain.model.CategoryModel
+import com.dicoding.academy.themealsapp.ui.common.ViewModelFactory
+import com.dicoding.academy.themealsapp.ui.view.EmptyView
+
+@Composable
+fun FavoriteScreen(
+    modifier: Modifier = Modifier,
+    viewModel: FavoriteViewModel = viewModel(
+        factory = ViewModelFactory(Injection.provideMealUseCase(LocalContext.current))
+    ),
+    navigateToDetail: (CategoryModel) -> Unit,
+) {
+
+    val categories  = viewModel.categories.observeAsState()
+
+    viewModel.getCategories()
+
+    categories.value.let {
+        if (it != null && it.isNotEmpty()) {
+            FavoriteContent(
+                categories = it,
+                modifier = modifier,
+                navigateToDetail = navigateToDetail,
+            )
+        } else {
+            EmptyView()
+            viewModel.getCategories()
+        }
+    }
+}
+
+@Composable
+fun FavoriteContent(
+    categories: List<CategoryModel>,
+    modifier: Modifier = Modifier,
+    navigateToDetail: (CategoryModel) -> Unit,
+) {
+    LazyColumn(
+        contentPadding = PaddingValues(16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+        modifier = modifier
+    ) {
+        items(categories) { data ->
+            CategoryFavoriteRow(
+                data,
+                modifier = Modifier.clickable {
+                    navigateToDetail(data)
+                }
+            )
+        }
+
+    }
 }
