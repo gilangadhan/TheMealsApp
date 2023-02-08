@@ -15,4 +15,5 @@ class DetailViewModel(
     fun deleteCategory(id: String) {
         mealUseCase.deteleFavoriteCategory(id)
     }
+    fun getMeals(category: String) = mealUseCase.getMeals(category)
 }

@@ -1,10 +1,10 @@
-package com.dicoding.academy.themealsapp.module.favorite
+package com.dicoding.academy.themealsapp.module.search
 
 import androidx.lifecycle.ViewModel
 import com.dicoding.academy.themealsapp.core.domain.usecase.MealUseCase
 
-class FavoriteViewModel(
+class SearchViewModel(
     private val mealUseCase: MealUseCase
 ) : ViewModel() {
-    fun getCategories() = mealUseCase.getFavoriteCategories()
+    fun searchMeals(keyword: String) = mealUseCase.searchMeals(keyword)
 }

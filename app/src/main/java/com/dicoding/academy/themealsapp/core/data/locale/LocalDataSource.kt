@@ -3,7 +3,6 @@ package com.dicoding.academy.themealsapp.core.data.locale
 import androidx.lifecycle.LiveData
 import com.dicoding.academy.themealsapp.core.data.locale.entity.CategoryEntity
 import com.dicoding.academy.themealsapp.core.data.locale.room.MealDao
-import com.dicoding.academy.themealsapp.core.domain.model.CategoryModel
 
 class LocalDataSource private constructor(private val mealDao: MealDao) {
 

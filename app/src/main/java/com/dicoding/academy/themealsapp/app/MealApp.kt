@@ -1,9 +1,5 @@
 package com.dicoding.academy.themealsapp.app
 
-import android.content.Context
-import android.content.Intent
-import android.os.Build
-import android.os.Bundle
 import android.util.Log
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
@@ -11,33 +7,28 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
 import com.dicoding.academy.themealsapp.R
 import com.dicoding.academy.themealsapp.core.domain.model.CategoryModel
 import com.dicoding.academy.themealsapp.module.detail.DetailScreen
 import com.dicoding.academy.themealsapp.module.favorite.FavoriteScreen
 import com.dicoding.academy.themealsapp.module.home.HomeScreen
 import com.dicoding.academy.themealsapp.module.profile.ProfileScreen
-import com.dicoding.academy.themealsapp.ui.common.categoryJSONToModel
-import com.dicoding.academy.themealsapp.ui.common.categoryModelToJSON
+import com.dicoding.academy.themealsapp.module.search.SearchScreen
 import com.dicoding.academy.themealsapp.ui.navigation.NavigationItem
 import com.dicoding.academy.themealsapp.ui.navigation.Screen
 import com.dicoding.academy.themealsapp.ui.theme.MyMovieTheme
-import com.google.gson.Gson
-import com.squareup.moshi.Moshi
 
 @Composable
 fun MealApp(
@@ -71,8 +62,10 @@ fun MealApp(
                     }
                 )
             }
+            composable(Screen.Search.route) {
+                SearchScreen()
+            }
             composable(Screen.Favorite.route) {
-                val context = LocalContext.current
                 FavoriteScreen(
                     navigateToDetail = {
                         navController.currentBackStackEntry?.savedStateHandle?.set(
@@ -101,22 +94,6 @@ fun MealApp(
     }
 }
 
-private fun shareOrder(context: Context, summary: String) {
-    val intent = Intent(Intent.ACTION_SEND).apply {
-        type = "text/plain"
-        putExtra(Intent.EXTRA_SUBJECT, context.getString(R.string.detail))
-        putExtra(Intent.EXTRA_TEXT, summary)
-    }
-
-    context.startActivity(
-        Intent.createChooser(
-            intent,
-            context.getString(R.string.detail)
-        )
-    )
-}
-
-
 @Composable
 private fun BottomBar(
     navController: NavHostController,
@@ -132,6 +109,11 @@ private fun BottomBar(
                 title = stringResource(R.string.menu_home),
                 icon = Icons.Default.Home,
                 screen = Screen.Home
+            ),
+            NavigationItem(
+                title = stringResource(R.string.menu_search),
+                icon = Icons.Default.Search,
+                screen = Screen.Search
             ),
             NavigationItem(
                 title = stringResource(R.string.menu_favorite),

@@ -15,6 +15,7 @@ import com.dicoding.academy.themealsapp.core.di.Injection
 import com.dicoding.academy.themealsapp.core.domain.model.CategoryModel
 import com.dicoding.academy.themealsapp.ui.common.ViewModelFactory
 import com.dicoding.academy.themealsapp.ui.view.EmptyView
+import com.dicoding.academy.themealsapp.ui.view.LoadingView
 
 @Composable
 fun FavoriteScreen(
@@ -25,17 +26,17 @@ fun FavoriteScreen(
     navigateToDetail: (CategoryModel) -> Unit,
 ) {
 
-    val categories  = viewModel.categories.observeAsState()
+    val categories = viewModel.getCategories().observeAsState().value
 
-    viewModel.getCategories()
-
-    categories.value.let {
+    categories.let {
         if (it != null && it.isNotEmpty()) {
             FavoriteContent(
                 categories = it,
                 modifier = modifier,
                 navigateToDetail = navigateToDetail,
             )
+        } else if (it != null){
+            LoadingView()
         } else {
             EmptyView()
             viewModel.getCategories()

@@ -5,11 +5,14 @@ import androidx.lifecycle.Transformations
 import com.dicoding.academy.themealsapp.core.data.locale.LocalDataSource
 import com.dicoding.academy.themealsapp.core.data.remote.RemoteDataSource
 import com.dicoding.academy.themealsapp.core.domain.model.CategoryModel
+import com.dicoding.academy.themealsapp.core.domain.model.MealModel
 import com.dicoding.academy.themealsapp.core.utils.AppExecutors
 import com.dicoding.academy.themealsapp.core.utils.DataMapper
 
 interface IMealRepository {
     fun getCategories(): LiveData<List<CategoryModel>>
+    fun getMeals(category: String): LiveData<List<MealModel>>
+    fun searchMeals(keyword: String): LiveData<List<MealModel>>
     fun getFavoriteCategories(): LiveData<List<CategoryModel>>
     fun addFavoriteCategory(category: CategoryModel)
     fun getFavoriteCategoryBy(id: String): LiveData<CategoryModel>
@@ -38,18 +41,29 @@ class MealRepository private constructor(
 
     override fun getCategories(): LiveData<List<CategoryModel>> {
         return Transformations.map(remoteDataSource.getCategories()) {
-            DataMapper.mapResponsesToDomain(it)
+            DataMapper.mapCategoryResponsesToDomain(it)
         }
     }
 
+    override fun getMeals(category: String): LiveData<List<MealModel>> {
+        return Transformations.map(remoteDataSource.getMeals(category)) {
+            DataMapper.mapMealResponsesToDomain(it)
+        }
+    }
+
+    override fun searchMeals(keyword: String): LiveData<List<MealModel>> {
+        return Transformations.map(remoteDataSource.searchMeals(keyword)) {
+            DataMapper.mapMealResponsesToDomain(it)
+        }
+    }
     override fun getFavoriteCategories(): LiveData<List<CategoryModel>> {
         return Transformations.map(localDataSource.getFavoriteCategories()) {
-            DataMapper.mapEntitiesToDomain(it)
+            DataMapper.mapCategoryEntitiesToDomain(it)
         }
     }
 
     override fun addFavoriteCategory(category: CategoryModel) {
-        val categoryEntity = DataMapper.mapDomainToEntity(category)
+        val categoryEntity = DataMapper.mapCategoryDomainToEntity(category)
         appExecutors.diskIO().execute { localDataSource.addCategory(categoryEntity) }
     }
 
@@ -57,7 +71,7 @@ class MealRepository private constructor(
         val result = localDataSource.getCategoryBy(id)
         return Transformations.map(result) {
             if (it != null) {
-                DataMapper.mapEntityToDomain(it)
+                DataMapper.mapCategoryEntityToDomain(it)
             } else {
                 it
             }

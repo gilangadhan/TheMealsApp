@@ -8,6 +8,7 @@ import com.dicoding.academy.themealsapp.core.domain.usecase.MealUseCase
 import com.dicoding.academy.themealsapp.module.detail.DetailViewModel
 import com.dicoding.academy.themealsapp.module.favorite.FavoriteViewModel
 import com.dicoding.academy.themealsapp.module.home.HomeViewModel
+import com.dicoding.academy.themealsapp.module.search.SearchViewModel
 
 class ViewModelFactory(private val mealUseCase: MealUseCase) :
     ViewModelProvider.NewInstanceFactory() {
@@ -35,6 +36,9 @@ class ViewModelFactory(private val mealUseCase: MealUseCase) :
             }
             modelClass.isAssignableFrom(DetailViewModel::class.java) -> {
                 DetailViewModel(mealUseCase) as T
+            }
+            modelClass.isAssignableFrom(SearchViewModel::class.java) -> {
+                SearchViewModel(mealUseCase) as T
             }
             else -> throw Throwable("Unknown ViewModel class: " + modelClass.name)
         }

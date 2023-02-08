@@ -1,4 +1,4 @@
-package com.dicoding.academy.themealsapp.module.profile
+package com.dicoding.academy.themealsapp.module.detail
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -20,7 +20,9 @@ import coil.compose.SubcomposeAsyncImage
 import com.dicoding.academy.themealsapp.ui.theme.Shapes
 
 @Composable
-fun ProfileScreen(
+fun MealRow(
+    title: String,
+    image: String,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -29,7 +31,7 @@ fun ProfileScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         SubcomposeAsyncImage(
-            model = "https://media.licdn.com/dms/image/C4D03AQFAOkPkati9QQ/profile-displayphoto-shrink_200_200/0/1607408289641?e=1681344000&v=beta&t=eVjIz0of0-_neDX60W36FZ0NT8mP2FF19sxp076S2hw",
+            model = image,
             contentDescription = null,
             contentScale = ContentScale.Fit,
             loading = {
@@ -41,17 +43,12 @@ fun ProfileScreen(
         )
 
         Text(
-            text = "Gilang Ramadhan",
+            text = title,
             overflow = TextOverflow.Ellipsis,
             style = MaterialTheme.typography.subtitle1.copy(
                 fontWeight = FontWeight.ExtraBold
             ),
             textAlign = TextAlign.Center
-        )
-        Text(
-            text = "gilangramadhan96.gr@gmail.com",
-            overflow = TextOverflow.Ellipsis,
-            style = MaterialTheme.typography.subtitle1
         )
     }
 }

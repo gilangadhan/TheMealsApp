@@ -2,7 +2,6 @@ package com.dicoding.academy.themealsapp.ui.common
 
 import com.dicoding.academy.themealsapp.core.domain.model.CategoryModel
 import com.squareup.moshi.Moshi
-import org.json.JSONObject
 
 fun categoryModelToJSON(categoryModel: CategoryModel): String {
     val moshi = Moshi.Builder().build()

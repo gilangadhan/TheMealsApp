@@ -6,7 +6,6 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.dicoding.academy.themealsapp.core.data.locale.entity.CategoryEntity
-import com.dicoding.academy.themealsapp.core.domain.model.CategoryModel
 
 @Dao
 interface MealDao {

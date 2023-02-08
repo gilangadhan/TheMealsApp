@@ -4,23 +4,18 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.dicoding.academy.themealsapp.core.di.Injection
-import com.dicoding.academy.themealsapp.ui.common.ViewModelFactory
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.dicoding.academy.themealsapp.core.di.Injection
 import com.dicoding.academy.themealsapp.core.domain.model.CategoryModel
+import com.dicoding.academy.themealsapp.ui.common.ViewModelFactory
 import com.dicoding.academy.themealsapp.ui.view.EmptyView
+import com.dicoding.academy.themealsapp.ui.view.LoadingView
 
 @Composable
 fun HomeScreen(
@@ -30,17 +25,17 @@ fun HomeScreen(
     ),
     navigateToDetail: (CategoryModel) -> Unit,
 ) {
-    val categories  = viewModel.categories.observeAsState()
+    val categories  = viewModel.getCategories().observeAsState().value
 
-    viewModel.getCategories()
-
-    categories.value.let {
+    categories.let {
         if (it != null && it.isNotEmpty()) {
             HomeContent(
                 categories = it,
                 modifier = modifier,
                 navigateToDetail = navigateToDetail,
             )
+        } else if (it != null){
+            LoadingView()
         } else {
             EmptyView()
             viewModel.getCategories()

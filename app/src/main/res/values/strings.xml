@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">TheMealsApp</string>
     <string name="menu_home">Home</string>
+    <string name="menu_search">Search</string>
     <string name="menu_favorite">Favorite</string>
     <string name="menu_profile">Profile</string>
-    <string name="detail">Detail</string>
 </resources>

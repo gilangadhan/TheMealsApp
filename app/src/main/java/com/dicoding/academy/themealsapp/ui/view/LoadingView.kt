@@ -11,14 +11,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun EmptyView() {
+fun LoadingView() {
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     )  {
         Text(
-            text = "No data, please try again.",
+            text = "Loading data.",
             textAlign = TextAlign.Center,
             fontSize = 30.sp
         )

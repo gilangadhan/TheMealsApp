@@ -6,6 +6,8 @@ import androidx.lifecycle.MutableLiveData
 import com.dicoding.academy.themealsapp.core.data.remote.network.ApiService
 import com.dicoding.academy.themealsapp.core.data.remote.reponse.CategoriesResponse
 import com.dicoding.academy.themealsapp.core.data.remote.reponse.CategoryResponse
+import com.dicoding.academy.themealsapp.core.data.remote.reponse.MealResponse
+import com.dicoding.academy.themealsapp.core.data.remote.reponse.MealsResponse
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -24,7 +26,6 @@ class RemoteDataSource private constructor(private val apiService: ApiService) {
     fun getCategories(): LiveData<List<CategoryResponse>> {
         val resultData = MutableLiveData<List<CategoryResponse>>()
 
-        //get data from remote api
         val client = apiService.getCategories()
 
         client.enqueue(object : Callback<CategoriesResponse> {
@@ -45,4 +46,53 @@ class RemoteDataSource private constructor(private val apiService: ApiService) {
 
         return resultData
     }
+
+    fun getMeals(category: String): LiveData<List<MealResponse>> {
+        val resultData = MutableLiveData<List<MealResponse>>()
+
+        val client = apiService.getMeals(by = category)
+
+        client.enqueue(object : Callback<MealsResponse> {
+            override fun onResponse(
+                call: Call<MealsResponse>,
+                response: Response<MealsResponse>
+            ) {
+                val dataArray = response.body()
+                if (dataArray != null) {
+                    resultData.value =  dataArray.meals
+                }
+            }
+
+            override fun onFailure(call: Call<MealsResponse>, t: Throwable) {
+                Log.e("RemoteDataSource", t.message.toString())
+            }
+        })
+
+        return resultData
+    }
+
+    fun searchMeals(keyword: String): LiveData<List<MealResponse>> {
+        val resultData = MutableLiveData<List<MealResponse>>()
+
+        val client = apiService.searchMeal(by = keyword)
+
+        client.enqueue(object : Callback<MealsResponse> {
+            override fun onResponse(
+                call: Call<MealsResponse>,
+                response: Response<MealsResponse>
+            ) {
+                val dataArray = response.body()
+                if (dataArray != null) {
+                    resultData.value =  dataArray.meals
+                }
+            }
+
+            override fun onFailure(call: Call<MealsResponse>, t: Throwable) {
+                Log.e("RemoteDataSource", t.message.toString())
+            }
+        })
+
+        return resultData
+    }
+
 }

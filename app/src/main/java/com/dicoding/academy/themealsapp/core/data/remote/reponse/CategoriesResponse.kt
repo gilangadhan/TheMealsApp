@@ -4,20 +4,20 @@ import com.google.gson.annotations.SerializedName
 
 data class CategoriesResponse(
     @field:SerializedName("categories")
-    val categories: List<CategoryResponse>,
+    var categories: List<CategoryResponse> = arrayListOf(),
 )
 
 data class CategoryResponse(
     @field:SerializedName("idCategory")
-    val id: String,
+    var id: String = "",
 
     @field:SerializedName("strCategory")
-    val title: String,
+    var title: String = "",
 
     @field:SerializedName("strCategoryThumb")
-    val image: String,
+    var image: String = "",
 
     @field:SerializedName("strCategoryDescription")
-    val description: String,
+    var description: String = "",
 
 )
