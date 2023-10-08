@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -29,15 +30,15 @@ fun ProfileScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         SubcomposeAsyncImage(
-            model = "https://media.licdn.com/dms/image/C4D03AQFAOkPkati9QQ/profile-displayphoto-shrink_200_200/0/1607408289641?e=1681344000&v=beta&t=eVjIz0of0-_neDX60W36FZ0NT8mP2FF19sxp076S2hw",
+            model = "https://media.licdn.com/dms/image/D5603AQFR1BtCNIUwEg/profile-displayphoto-shrink_200_200/0/1687164690410?e=1702512000&v=beta&t=KSD-4wHjlx3A2-KKZBDn4WngCF4UKWu_QucQjmyNUSY",
             contentDescription = null,
-            contentScale = ContentScale.Fit,
+            contentScale = ContentScale.Crop,
             loading = {
                 CircularProgressIndicator()
             },
             modifier = Modifier
                 .size(150.dp)
-                .clip(Shapes.medium)
+                .clip(CircleShape)
         )
 
         Text(

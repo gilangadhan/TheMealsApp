@@ -61,7 +61,7 @@ fun DetailScreen(
                     } else {
                         viewModel.addCategory(categoryModel)
                     }
-                    isFavorite != isFavorite
+                    isFavorite = !isFavorite
                 },
             ) {
                 Icon(

@@ -1,13 +1,16 @@
 package com.dicoding.academy.themealsapp.core.data
 
+import android.util.Log
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.Transformations
+import androidx.lifecycle.MediatorLiveData
+import androidx.lifecycle.map
 import com.dicoding.academy.themealsapp.core.data.locale.LocalDataSource
 import com.dicoding.academy.themealsapp.core.data.remote.RemoteDataSource
 import com.dicoding.academy.themealsapp.core.domain.model.CategoryModel
 import com.dicoding.academy.themealsapp.core.domain.model.MealModel
 import com.dicoding.academy.themealsapp.core.utils.AppExecutors
 import com.dicoding.academy.themealsapp.core.utils.DataMapper
+import kotlin.math.log
 
 interface IMealRepository {
     fun getCategories(): LiveData<List<CategoryModel>>
@@ -40,24 +43,24 @@ class MealRepository private constructor(
     }
 
     override fun getCategories(): LiveData<List<CategoryModel>> {
-        return Transformations.map(remoteDataSource.getCategories()) {
+        return remoteDataSource.getCategories().map {
             DataMapper.mapCategoryResponsesToDomain(it)
         }
     }
 
     override fun getMeals(category: String): LiveData<List<MealModel>> {
-        return Transformations.map(remoteDataSource.getMeals(category)) {
+        return remoteDataSource.getMeals(category).map {
             DataMapper.mapMealResponsesToDomain(it)
         }
     }
 
     override fun searchMeals(keyword: String): LiveData<List<MealModel>> {
-        return Transformations.map(remoteDataSource.searchMeals(keyword)) {
+        return remoteDataSource.searchMeals(keyword).map {
             DataMapper.mapMealResponsesToDomain(it)
         }
     }
     override fun getFavoriteCategories(): LiveData<List<CategoryModel>> {
-        return Transformations.map(localDataSource.getFavoriteCategories()) {
+        return localDataSource.getFavoriteCategories().map {
             DataMapper.mapCategoryEntitiesToDomain(it)
         }
     }
@@ -69,13 +72,16 @@ class MealRepository private constructor(
 
     override fun getFavoriteCategoryBy(id: String): LiveData<CategoryModel>  {
         val result = localDataSource.getCategoryBy(id)
-        return Transformations.map(result) {
+
+        val mediatorLiveData = MediatorLiveData<CategoryModel>()
+
+        mediatorLiveData.addSource(result) {
             if (it != null) {
-                DataMapper.mapCategoryEntityToDomain(it)
-            } else {
-                it
+                mediatorLiveData.value = DataMapper.mapCategoryEntityToDomain(it)
             }
         }
+
+        return mediatorLiveData
     }
 
     override fun deleteFavoriteCategory(id: String) {
